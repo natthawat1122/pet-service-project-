@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ชำระเงิน / ยืนยันการจอง</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body{
+            background: linear-gradient(135deg, #fff7fb, #f0f7ff);
+            min-height: 100vh;
+        }
+        .checkout-box{
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 18px 35px rgba(0,0,0,0.08);
+            padding: 30px;
+        }
+        .summary-box{
+            background: #fff8fd;
+            border-radius: 22px;
+            padding: 24px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.04);
+        }
+        .btn-main{
+            background: linear-gradient(90deg, #ff9ec4, #cdb4ff);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-weight: 700;
+            padding: 12px 20px;
+        }
+        .btn-main:hover{
+            opacity: 0.92;
+            color: white;
+        }
+        .form-control, .form-select{
+            border-radius: 14px;
+            padding: 12px;
+        }
+        .section-title{
+            font-weight: 800;
+            color: #7b5ea7;
+            margin-bottom: 20px;
+        }
+        .payment-note{
+            background: #fff4da;
+            border-radius: 16px;
+            padding: 14px;
+            color: #7a5a00;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container py-5">
+    <div class="mb-4 d-flex justify-content-between align-items-center">
+        <h1 class="fw-bold">ยืนยันการจอง / ชำระเงิน</h1>
+        <a href="{% url 'cart' %}" class="btn btn-outline-dark rounded-pill">← กลับตะกร้า</a>
+    </div>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="row g-4">
+            <div class="col-lg-7">
+                <div class="checkout-box">
+                    <h3 class="section-title">ข้อมูลลูกค้า</h3>
+
+                    <div class="mb-3">
+                        <label class="form-label">ชื่อ-นามสกุล</label>
+                        <input type="text" name="full_name" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">เบอร์โทร</label>
+                        <input type="text" name="phone" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">ที่อยู่</label>
+                        <textarea name="address" class="form-control" rows="3" required></textarea>
+                    </div>
+
+                    <h3 class="section-title mt-4">ข้อมูลสัตว์เลี้ยง</h3>
+
+                    <div class="mb-3">
+                        <label class="form-label">ชื่อสัตว์เลี้ยง</label>
+                        <input type="text" name="pet_name" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">ประเภทสัตว์เลี้ยง</label>
+                        <input type="text" name="pet_type" class="form-control" placeholder="เช่น สุนัข, แมว" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">วันที่ต้องการจอง</label>
+                        <input type="date" name="booking_date" class="form-control" required>
+                    </div>
+
+                    <h3 class="section-title mt-4">วิธีชำระเงิน</h3>
+
+                    <div class="mb-3">
+                        <label class="form-label">เลือกวิธีชำระเงิน</label>
+                        <select name="payment_method" class="form-select" required>
+                            <option value="">-- เลือกวิธีชำระเงิน --</option>
+                            <option value="cash">เงินสด</option>
+                            <option value="transfer">โอนเงิน</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">อัปโหลดสลิป (กรณีโอนเงิน)</label>
+                        <input type="file" name="slip_image" class="form-control">
+                    </div>
+
+                    <div class="payment-note mb-3">
+                        หากเลือกชำระแบบโอน สามารถอัปโหลดสลิปเพื่อให้แอดมินตรวจสอบได้
+                    </div>
+
+                    <button type="submit" class="btn btn-main w-100">ยืนยันการจอง</button>
+                </div>
+            </div>
+
+            <div class="col-lg-5">
+                <div class="summary-box">
+                    <h4 class="fw-bold mb-3">สรุปรายการ</h4>
+
+                    {% for item in cart_items %}
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <div class="fw-bold">{{ item.name }}</div>
+                                <small class="text-muted">{{ item.quantity }} x {{ item.price }} บาท</small>
+                            </div>
+                            <div class="fw-bold">{{ item.subtotal }} บาท</div>
+                        </div>
+                    {% endfor %}
+
+                    <hr>
+
+                    <div class="d-flex justify-content-between">
+                        <span class="fw-bold">รวมทั้งหมด</span>
+                        <span class="fw-bold text-success">{{ total_price }} บาท</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

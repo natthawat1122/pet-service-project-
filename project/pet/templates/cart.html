@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ตะกร้าของฉัน</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body{
+            background: linear-gradient(135deg, #fff7fb, #f0f7ff);
+            min-height: 100vh;
+        }
+        .cart-box{
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 18px 35px rgba(0,0,0,0.08);
+            padding: 30px;
+        }
+        .cart-item{
+            border-bottom: 1px solid #eee;
+            padding: 18px 0;
+        }
+        .cart-item:last-child{
+            border-bottom: none;
+        }
+        .cart-img{
+            width: 95px;
+            height: 95px;
+            object-fit: cover;
+            border-radius: 18px;
+        }
+        .qty-btn{
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            border: none;
+            background: #f4e8ff;
+            color: #7b5ea7;
+            font-weight: 800;
+        }
+        .btn-main{
+            background: linear-gradient(90deg, #ff9ec4, #cdb4ff);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-weight: 700;
+            padding: 12px 20px;
+        }
+        .btn-main:hover{
+            opacity: 0.92;
+            color: white;
+        }
+        .btn-remove{
+            background: #ff8fab;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+        }
+        .summary-box{
+            background: #fff8fd;
+            border-radius: 22px;
+            padding: 24px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container py-5">
+    <div class="mb-4 d-flex justify-content-between align-items-center">
+        <h1 class="fw-bold">ตะกร้าของฉัน</h1>
+        <a href="{% url 'home' %}" class="btn btn-outline-dark rounded-pill">← กลับหน้าแรก</a>
+    </div>
+
+    <div class="cart-box">
+        {% if cart_items %}
+            <div class="row">
+                <div class="col-lg-8">
+                    {% for item in cart_items %}
+                        <div class="cart-item">
+                            <div class="row align-items-center">
+                                <div class="col-md-2">
+                                    {% if item.image %}
+                                        <img src="{{ item.image }}" class="cart-img" alt="{{ item.name }}">
+                                    {% else %}
+                                        <img src="https://via.placeholder.com/200x200?text=Pet" class="cart-img" alt="No image">
+                                    {% endif %}
+                                </div>
+
+                                <div class="col-md-4">
+                                    <h5 class="fw-bold mb-1">{{ item.name }}</h5>
+                                    <p class="text-muted mb-0">{{ item.price }} บาท</p>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <a href="{% url 'update_cart' item.id 'decrease' %}" class="qty-btn text-decoration-none d-flex align-items-center justify-content-center">-</a>
+                                        <span class="fw-bold">{{ item.quantity }}</span>
+                                        <a href="{% url 'update_cart' item.id 'increase' %}" class="qty-btn text-decoration-none d-flex align-items-center justify-content-center">+</a>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <span class="fw-bold text-success">{{ item.subtotal }} บาท</span>
+                                </div>
+
+                                <div class="col-md-1">
+                                    <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-remove btn-sm">ลบ</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="summary-box">
+                        <h4 class="fw-bold mb-3">สรุปรายการ</h4>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>รวมทั้งหมด</span>
+                            <span class="fw-bold">{{ total_price }} บาท</span>
+                        </div>
+
+                        <a href="{% url 'checkout' %}" class="btn btn-main w-100">ดำเนินการชำระเงิน</a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="text-center py-5">
+                <h4 class="fw-bold mb-3">ยังไม่มีรายการในตะกร้า</h4>
+                <p class="text-muted">เลือกบริการที่ต้องการแล้วเพิ่มลงตะกร้าได้เลย</p>
+                <a href="{% url 'home' %}" class="btn btn-main">ไปเลือกบริการ</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Service</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body{
+            background: linear-gradient(135deg, #fff7fb, #f7fbff, #fffaf2);
+            min-height: 100vh;
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        .navbar-custom{
+            background: linear-gradient(90deg, #ffb6c1, #ffd6a5, #cde7ff);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        .navbar-brand{
+            color: #6b4f7a !important;
+            font-weight: 800;
+            font-size: 2rem;
+        }
+
+        .welcome-text{
+            color: #6b4f7a !important;
+            font-weight: 700;
+        }
+
+        .hero{
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(8px);
+            border-radius: 32px;
+            padding: 55px 30px;
+            margin-top: 35px;
+            box-shadow: 0 16px 40px rgba(0,0,0,0.07);
+            text-align: center;
+        }
+
+        .hero h1{
+            font-size: 2.9rem;
+            font-weight: 900;
+            color: #7b5ea7;
+            margin-bottom: 15px;
+        }
+
+        .hero p{
+            color: #6f6f6f;
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+        }
+
+        .search-box{
+            max-width: 720px;
+            margin: 25px auto 0;
+        }
+
+        .search-box .form-control{
+            border-radius: 18px 0 0 18px;
+            border: 2px solid #f3d5f8;
+            padding: 18px 20px;
+            font-size: 1.1rem;
+            box-shadow: none;
+        }
+
+        .search-box .form-control:focus{
+            border-color: #d7b8ff;
+            box-shadow: 0 0 0 0.15rem rgba(215, 184, 255, 0.25);
+        }
+
+        .section-title{
+            font-size: 3rem;
+            font-weight: 900;
+            color: #394150;
+            margin-top: 60px;
+            margin-bottom: 20px;
+        }
+
+        .service-card{
+            border: none;
+            border-radius: 26px;
+            overflow: hidden;
+            box-shadow: 0 14px 30px rgba(0,0,0,0.08);
+            transition: 0.25s ease;
+            background: rgba(255,255,255,0.95);
+            height: 100%;
+        }
+
+        .service-card:hover{
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 18px 35px rgba(0,0,0,0.10);
+        }
+
+        .service-card img{
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+        }
+
+        .card-body{
+            padding: 22px;
+        }
+
+        .category-badge{
+            display: inline-block;
+            background: linear-gradient(90deg, #ffd6e7, #fce7b2);
+            color: #7b5ea7;
+            padding: 7px 14px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .card-title-custom{
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #4b5563;
+        }
+
+        .price{
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #ff6fa1;
+        }
+
+        .btn-main{
+            background: linear-gradient(90deg, #ff9ec4, #cdb4ff);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            padding: 11px 20px;
+            font-weight: 700;
+        }
+
+        .btn-main:hover{
+            opacity: 0.92;
+            color: white;
+        }
+
+        .btn-login-soft{
+            border: 2px solid #d7b8ff;
+            color: #7b5ea7;
+            border-radius: 14px;
+            font-weight: 700;
+            padding: 10px 18px;
+            background: white;
+        }
+
+        .btn-login-soft:hover{
+            background: #f8f1ff;
+            color: #7b5ea7;
+        }
+
+        .btn-signup{
+            background: #ffb3c7;
+            border: none;
+            color: white;
+            border-radius: 12px;
+            font-weight: 700;
+        }
+
+        .btn-signup:hover{
+            background: #ff9fba;
+            color: white;
+        }
+
+        .btn-orders{
+            background: white;
+            color: #7b5ea7;
+            border-radius: 12px;
+            font-weight: 700;
+            border: none;
+        }
+
+        .btn-admin{
+            background: #ffe08a;
+            color: #6b4f00;
+            border-radius: 12px;
+            font-weight: 700;
+            border: none;
+        }
+
+        .btn-logout{
+            background: #ff7b9c;
+            color: white;
+            border-radius: 12px;
+            font-weight: 700;
+            border: none;
+        }
+
+        .footer{
+            background: rgba(255,255,255,0.9);
+            padding: 30px 20px;
+            border-radius: 24px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+            margin-top: 40px;
+            margin-bottom: 30px;
+            text-align: center;
+            color: #7b5ea7;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-custom">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'home' %}">🐶 Pet Service</a>
+
+        <div class="d-flex align-items-center gap-2">
+            {% if user.is_authenticated %}
+                <span class="welcome-text">สวัสดี {{ user.username }}</span>
+                <a href="{% url 'cart' %}" class="btn btn-orders btn-sm">ตะกร้า</a>
+                <a href="{% url 'my_orders' %}" class="btn btn-orders btn-sm">ออเดอร์ของฉัน</a>
+                
+
+                {% if user.is_staff %}
+                    <a href="/admin/" class="btn btn-admin btn-sm">หลังบ้าน</a>
+                {% endif %}
+
+                <a href="{% url 'logout' %}" class="btn btn-logout btn-sm">ออกจากระบบ</a>
+            {% else %}
+                <a href="{% url 'signup' %}" class="btn btn-signup btn-sm">สมัครสมาชิก</a>
+                <a href="{% url 'login' %}" class="btn btn-login-soft btn-sm">เข้าสู่ระบบ</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+
+    <div class="hero">
+        <h1>ระบบบริการดูแลสัตว์เลี้ยงออนไลน์</h1>
+        <p>ค้นหาบริการ อาบน้ำ ตัดขน ฝากเลี้ยง และบริการสำหรับสัตว์เลี้ยงได้ในที่เดียว</p>
+
+        <form method="GET" class="search-box">
+            <div class="input-group input-group-lg">
+                <input type="text" name="q" class="form-control" placeholder="ค้นหาบริการ..." value="{{ request.GET.q }}">
+                <button class="btn btn-main" type="submit">ค้นหา</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="mt-5 mb-3">
+        <h2 class="section-title">รายการบริการ</h2>
+    </div>
+
+    <div class="row">
+        {% for item in items %}
+            <div class="col-md-4 mb-4">
+                <div class="service-card">
+                    {% if item.image %}
+                        <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                    {% else %}
+                        <img src="https://via.placeholder.com/600x400?text=Pet+Service" alt="No image">
+                    {% endif %}
+
+                    <div class="card-body">
+                        <span class="category-badge">{{ item.category.name }}</span>
+                        <h5 class="card-title-custom">{{ item.name }}</h5>
+                        <p class="text-muted">{{ item.description|truncatewords:15 }}</p>
+                        <p class="price">{{ item.price }} บาท</p>
+
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'service_detail' item.id %}" class="btn btn-main w-100">ดูรายละเอียด / จองบริการ</a>
+                        {% else %}
+                            <a href="{% url 'login' %}" class="btn btn-login-soft w-100">เข้าสู่ระบบเพื่อจอง</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <div class="alert alert-warning text-center rounded-4 shadow-sm">ยังไม่มีบริการในระบบ</div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="footer">
+        <p class="mb-0">Pet Service Web Application © 2026</p>
+    </div>
+
+</div>
+
+</body>
+</html>

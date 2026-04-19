@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>สมัครสมาชิก</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+body{
+    background: linear-gradient(135deg, #fff7fb, #f0f7ff);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+.auth-box{
+    max-width: 450px;
+    margin: auto;
+    background: white;
+    padding: 35px;
+    border-radius: 28px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+}
+
+.auth-box h2{
+    text-align: center;
+    margin-bottom: 25px;
+    font-weight: 800;
+    color: #7b5ea7;
+}
+
+.form-control{
+    border-radius: 12px;
+    padding: 12px;
+}
+
+.btn-main{
+    background: linear-gradient(90deg, #ff9ec4, #cdb4ff);
+    border: none;
+    border-radius: 12px;
+    font-weight: 700;
+    color: white;
+    padding: 12px;
+}
+
+.btn-main:hover{
+    opacity: 0.9;
+    color: white;
+}
+
+.helptext{
+    font-size: 0.9rem;
+    color: #888;
+    margin-top: 8px;
+}
+
+.error-box{
+    background: #ffe5e5;
+    color: #b00020;
+    border-radius: 14px;
+    padding: 12px 14px;
+    margin-bottom: 18px;
+}
+
+.link{
+    color: #7b5ea7;
+    font-weight: 600;
+}
+</style>
+</head>
+
+<body>
+
+<div class="auth-box">
+    <h2>✨ สมัครสมาชิก</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        {% if form.errors %}
+            <div class="error-box">
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <div>{{ error }}</div>
+                    {% endfor %}
+                {% endfor %}
+
+                {% for error in form.non_field_errors %}
+                    <div>{{ error }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="mb-3">
+            <label class="form-label">ชื่อผู้ใช้</label>
+            {{ form.username }}
+            {% if form.username.help_text %}
+                <div class="helptext">ใช้ได้เฉพาะตัวอักษรอังกฤษ ตัวเลข และ @ . + - _</div>
+            {% endif %}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">รหัสผ่าน</label>
+            {{ form.password1 }}
+            <div class="helptext">
+                ต้องมีอย่างน้อย 8 ตัวอักษร และไม่ควรเป็นตัวเลขล้วน
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">ยืนยันรหัสผ่าน</label>
+            {{ form.password2 }}
+        </div>
+
+        <button type="submit" class="btn btn-main w-100 mt-2">สร้างบัญชี</button>
+    </form>
+
+    <p class="text-center mt-3 mb-0">
+        มีบัญชีแล้ว? <a href="{% url 'login' %}" class="link">เข้าสู่ระบบ</a>
+    </p>
+</div>
+
+</body>
+</html>
